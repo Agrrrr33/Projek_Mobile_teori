@@ -1,48 +1,84 @@
 import 'package:flutter/material.dart';
+import 'package:testing/admin/profil.dart';
 
+void main() {
+  runApp(MyApp());
+}
 
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Location App',
+      theme: ThemeData(
+        primarySwatch: Colors.green,
+      ),
+      home: LocationPage(),
+    );
+  }
+}
 
-class LocationPage extends StatelessWidget {
+class LocationPage extends StatefulWidget {
+  @override
+  _LocationPageState createState() => _LocationPageState();
+}
+
+class _LocationPageState extends State<LocationPage> {
+  int _selectedIndex = 0; // Default index for the Location page
+
+  void _onItemTapped(int index) async {
+    if (index == 4) {
+      // Navigate to ProfileScreen and await the result
+      final result = await Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => ProfileScreen()),
+      );
+
+      // Check if a result was returned and update the selected index
+      if (result != null) {
+        setState(() {
+          _selectedIndex = result; // Set the selected index based on the result
+        });
+      }
+    } else {
+      setState(() {
+        _selectedIndex = index; // Update the selected index for other tabs
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.green[400],
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {
-            // Handle back button press
-          },
-        ),
-        title: Text('Lokasi', style: TextStyle(color: Colors.black)),
         actions: [
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: CircleAvatar(
-              backgroundImage: AssetImage('assets/logo.png'), // Ensure the logo is added in assets
+              backgroundImage: AssetImage('assets/logo.png'),
             ),
           ),
         ],
       ),
-
       body: Column(
         children: [
           Row(
             children: [
               Expanded(
                 child: Container(
-                  height: 50, // Height of the divider
-                  color: Colors.grey, // Gray color
-                child: Center(
-                  child: Text(
-                    'Lacak lokasi', // Text to be displayed
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black, // Text color
+                  height: 50,
+                  color: Colors.grey,
+                  child: Center(
+                    child: Text(
+                      'Lacak lokasi',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
                     ),
                   ),
                 ),
-              ),
               ),
             ],
           ),
@@ -54,15 +90,15 @@ class LocationPage extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start, // Align text to the left
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             'Nama:',
                             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                           ),
-                          SizedBox(height: 4), // Small spacing between label and value
+                          SizedBox(height: 4),
                           Text(
-                            'Muhib', // Replace with the actual name
+                            'Muhib',
                             style: TextStyle(fontSize: 16),
                           ),
                         ],
@@ -79,7 +115,7 @@ class LocationPage extends StatelessWidget {
                           ),
                           SizedBox(height: 4),
                           Text(
-                            '2020', // Replace with the actual angkatan
+                            '2020',
                             style: TextStyle(fontSize: 16),
                           ),
                         ],
@@ -100,7 +136,7 @@ class LocationPage extends StatelessWidget {
                           ),
                           SizedBox(height: 4),
                           Text(
-                            'Teknik', // Replace with the actual fakultas
+                            'Teknik',
                             style: TextStyle(fontSize: 16),
                           ),
                         ],
@@ -111,15 +147,15 @@ class LocationPage extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                        Text(
-                        'Jurusan:',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(height: 4),
-                      Text(
-                        'Informatika', // Replace with the actual jurusan
-                        style: TextStyle(fontSize: 16),
-                      ),
+                          Text(
+                            'Jurusan:',
+                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(height: 4),
+                          Text(
+                            'Informatika',
+                            style: TextStyle(fontSize: 16),
+                          ),
                         ],
                       ),
                     ),
@@ -129,8 +165,8 @@ class LocationPage extends StatelessWidget {
             ),
           ),
           Divider(
-            thickness: 2, // Set the thickness of the line
-            color: Colors.grey, // Set the color of the line
+            thickness: 2,
+            color: Colors.grey,
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -150,8 +186,8 @@ class LocationPage extends StatelessWidget {
                   border: Border.all(color: Colors.grey),
                 ),
                 child: Image.asset(
-                'assets/1map.png', // Replace with your actual image path
-                fit: BoxFit.cover, // Makes the image cover the container
+                  'assets/1map.png',
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
@@ -166,7 +202,7 @@ class LocationPage extends StatelessWidget {
                     backgroundColor: Colors.grey[300],
                   ),
                   onPressed: () {
-                    // Kembali ke halaman sebelumnya
+                    Navigator.pop(context);
                   },
                   child: Text('Kembali', style: TextStyle(color: Colors.black)),
                 ),
@@ -180,6 +216,7 @@ class LocationPage extends StatelessWidget {
         backgroundColor: Colors.green[400],
         selectedItemColor: Colors.black,
         unselectedItemColor: Colors.white,
+        currentIndex: _selectedIndex,
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.message), label: 'Mutasi'),
@@ -200,10 +237,10 @@ class LocationPage extends StatelessWidget {
           BottomNavigationBarItem(icon: Icon(Icons.info), label: 'Info'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
-        onTap: (index) {
-          // Handle navigation
-        },
+        onTap: _onItemTapped,
       ),
     );
   }
 }
+
+
